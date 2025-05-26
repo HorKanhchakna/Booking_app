@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User; // Make sure this is imported if you are using the User model
+use Illuminate\Support\Facades\Hash; // Make sure this is imported for password hashing
+use Illuminate\Support\Facades\Session; // Import Session facade (optional, but good practice if you use Session facade directly)
 
 class AuthController extends Controller
 {
@@ -27,7 +28,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user); // Auto login after register
-        return redirect()->route('index');
+        return redirect()->route('home'); // Redirect to home page after registration
     }
 
     public function showLogin() {
@@ -39,7 +40,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->route('index');
+            return redirect()->intended(route('home')); // Redirect to home page after login
         }
 
         return back()->withErrors([
@@ -47,12 +48,22 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request) {
-        Auth::logout();
+    public function logout(Request $request)
+    {
+        Auth::logout(); // Log out the user
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+        $request->session()->invalidate(); // Invalidate the session
+        $request->session()->regenerateToken(); // Regenerate the CSRF token
 
-        return redirect()->route('login');
+        // Redirect to the login page with a success message (optional)
+        return redirect()->route('login')->with('status', 'You have been logged out.');
+    }
+
+    // Assuming this profile method is part of AuthController for demonstration,
+    // but typically it would be in ProfileController as per your web.php
+    public function profile()
+    {
+       $user = Auth::user();
+       return view('profile.index', compact('user'));
     }
 }
