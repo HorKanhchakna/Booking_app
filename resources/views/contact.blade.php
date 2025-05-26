@@ -3,9 +3,9 @@
 @section('title', 'Contact')
 
 @section('content')
-
-<div class="container-fluid position-relative p-0">
-       <div class="container-fluid bg-primary py-5 mb-5 hero-header">
+    {{-- Hero Section --}}
+    <div class="container-fluid position-relative p-0">
+        <div class="container-fluid bg-primary py-5 mb-5 hero-header">
             <div class="container py-5">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
@@ -25,5 +25,4 @@
 
     {{-- Contact Section --}}
     @include('components.contact')
-
 @endsection

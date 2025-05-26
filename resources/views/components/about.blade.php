@@ -10,10 +10,11 @@
             </div>
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                 <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
-                <h1 class="mb-4">Welcome to <span class="text-primary">Tourist</span></h1>
-                <p class="mb-4">Tempor erat elitr rebum at clita...</p>
-                <p class="mb-4">Tempor erat elitr rebum at clita...</p>
-                <div class="row gy-2 gx-4 mb-4">
+                <h1 class="mb-4">Welcome to <span class="text-primary">Phuket Paradise Tours</span></h1>
+                <p class="mb-4">Established in 2010, we're Phuket's premier tour operator specializing in authentic Thai experiences. Our team of local experts brings you beyond the tourist trails to discover the real beauty of Thailand's Pearl of the Andaman.</p>
+                 <p class="mb-4">With over 50,000 satisfied travelers, we combine luxury service with deep local knowledge to create unforgettable journeys tailored to your preferences.</p>
+               
+                 <div class="row gy-2 gx-4 mb-4">
                     <div class="col-sm-6">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>First Class Flights</p>
                     </div>

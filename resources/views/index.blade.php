@@ -611,9 +611,7 @@
     <!-- Testimonial End -->
 
 
-     <!-- Footer Start -->
     @include('partials.footer')
-    <!-- Footer End -->
 
 
     <!-- Back to Top -->
