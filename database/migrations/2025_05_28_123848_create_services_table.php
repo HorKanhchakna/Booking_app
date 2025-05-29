@@ -11,14 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('testimonials', function (Blueprint $table) {
+        Schema::create('services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tour_id')->constrained('tours')->onDelete('cascade');
-            $table->tinyInteger('rating')->unsigned(); // 1-5 rating for example
-            $table->text('review')->nullable();
+            $table->string('icon');
+            $table->string('title');
+            $table->text('desc');
+            $table->string('badge')->nullable();
             $table->timestamps();
         });
+
     }
 
     /**
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('testimonials');
+        Schema::dropIfExists('services');
     }
 };

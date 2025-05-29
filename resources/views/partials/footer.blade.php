@@ -29,17 +29,18 @@
             </div>
 
             <!-- Gallery -->
+            @if(isset($galleries))
             <div class="col-lg-3 col-md-6">
                 <h4 class="text-white mb-3">Gallery</h4>
                 <div class="row g-2 pt-2">
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-1.jpg') }}" alt=""></div>
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-2.jpg') }}" alt=""></div>
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-3.jpg') }}" alt=""></div>
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-4.jpg') }}" alt=""></div>
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-5.jpg') }}" alt=""></div>
-                    <div class="col-4"><img class="img-fluid bg-light p-1" src="{{ asset('img/package-6.jpg') }}" alt=""></div>
+                    @foreach($galleries as $gallery)
+                        <div class="col-4">
+                            <img class="img-fluid bg-light p-1" src="{{ asset($gallery->image) }}" alt="">
+                        </div>
+                    @endforeach
                 </div>
             </div>
+            @endif
 
             <!-- Newsletter -->
             <div class="col-lg-3 col-md-6">

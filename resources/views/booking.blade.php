@@ -25,6 +25,8 @@
   {{-- Booking Process Section --}}
   @include('components.process')
 
+  @include('components.booking')
+
 </div>
 
 @endsection

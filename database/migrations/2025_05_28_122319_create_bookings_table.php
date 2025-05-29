@@ -9,18 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tour_id')->constrained('tours')->onDelete('cascade');
-            $table->date('booking_date');
-            $table->integer('number_of_people');
-            $table->decimal('total_price', 10, 2);
+            $table->string('name');
+            $table->string('email');
+            $table->dateTime('datetime');
+            $table->string('destination');
+            $table->text('message')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

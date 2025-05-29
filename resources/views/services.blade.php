@@ -3,9 +3,7 @@
 @section('title', 'Services')
 
 @section('content')
-
-<div class="container-fluid position-relative p-0">
-
+    {{-- Hero Section --}}
     <div class="container-fluid bg-primary py-5 mb-5 hero-header">
         <div class="container py-5">
             <div class="row justify-content-center py-5">
@@ -23,12 +21,9 @@
         </div>
     </div>
 
-</div>
+    {{-- Service Section --}}
+    @include('components.services', ['services' => $services])
 
-{{-- Service Section --}}
-@include('components.services')
-
-{{-- Testimonial Section --}}
-@include('components.testimonial')
-
+    {{-- Testimonial Section --}}
+    @include('components.testimonial')
 @endsection

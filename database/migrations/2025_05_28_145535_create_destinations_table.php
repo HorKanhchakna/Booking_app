@@ -13,20 +13,10 @@ return new class extends Migration
     {
         Schema::create('destinations', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('image')->nullable();
-            $table->text('description')->nullable();
-            $table->string('location')->nullable();
-            $table->boolean('is_active')->default(true);
+            $table->string('country');
+            $table->string('image');
+            $table->string('discount');
             $table->timestamps();
         });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('destinations');
     }
 };

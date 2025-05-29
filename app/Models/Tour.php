@@ -1,22 +1,26 @@
 <?php
 // app/Models/Tour.php
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Tour extends Model
 {
-    protected $fillable = ['name', 'description', 'price']; // add your fields
+    use HasFactory;
 
- // If a tour can have many bookings:
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+    // Explicitly define the correct table name
+    protected $table = 'tour_packages';
 
-    // If a tour can have many testimonials:
-    public function testimonials()
-    {
-        return $this->hasMany(Testimonial::class);
-    }
+    protected $fillable = [
+        'title',
+        'location',
+        'duration',
+        'max_people',
+        'price',
+        'rating',
+        'description',
+        'image_path'
+    ];
 }

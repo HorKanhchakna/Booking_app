@@ -24,6 +24,6 @@
 </div>
 
 {{-- Destination Section --}}
-@include('components.destination')
+@include('components.destination', ['destinations' => $destinations])
 
 @endsection

@@ -80,7 +80,7 @@
                 <div class="navbar-nav ms-auto py-0">
                     <a href="{{ url('/') }}" class="nav-item nav-link active">Home</a>
                     <a href="{{ url('/about') }}" class="nav-item nav-link">About</a>
-                    <a href="{{ url('/services') }}" class="nav-item nav-link">Services</a>
+                    <a href="{{ route('services.index') }}" class="nav-item nav-link {{ request()->is('services') ? 'active' : '' }}">Services</a>
                     <a href="{{ url('/packages') }}" class="nav-item nav-link">Packages</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
@@ -242,7 +242,6 @@
         </div>
     </div>
     <!-- Service End -->
-
 
     <!-- Destination Start -->
     <div class="container-xxl py-5 destination">
@@ -611,7 +610,8 @@
     <!-- Testimonial End -->
 
 
-    @include('partials.footer')
+    @include('partials.footer', ['galleries' => $galleries])
+
 
 
     <!-- Back to Top -->

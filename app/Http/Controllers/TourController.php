@@ -7,67 +7,33 @@ use Illuminate\Http\Request;
 
 class TourController extends Controller
 {
-    // Display a listing of tours
-    public function index()
-    {
-        $tours = Tour::all(); // get all tours
-        return view('tours.index', compact('tours'));
-    }
-
-    // Show the form for creating a new tour
-    public function create()
-    {
-        return view('tours.create');
-    }
-
-    // Store a newly created tour in database
     public function store(Request $request)
     {
-        // Validate input
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
+            'location' => 'required|string|max:255',
+            'duration' => 'required|string|max:50',
+            'max_people' => 'required|string|max:50',
             'price' => 'required|numeric|min:0',
+            'rating' => 'required|numeric|min:0|max:5',
+            'description' => 'required|string',
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-        // Create tour record
-        Tour::create($request->all());
+        // Handle image upload
+        $imagePath = $request->file('image')->store('package_images', 'public');
 
-        // Redirect to tours list with success message
-        return redirect()->route('tours.index')->with('success', 'Tour created successfully.');
-    }
-
-    // Display a specific tour
-    public function show(Tour $tour)
-    {
-        return view('tours.show', compact('tour'));
-    }
-
-    // Show the form for editing an existing tour
-    public function edit(Tour $tour)
-    {
-        return view('tours.edit', compact('tour'));
-    }
-
-    // Update the specified tour in database
-    public function update(Request $request, Tour $tour)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+        Tour::create([
+            'title' => $validated['title'],
+            'location' => $validated['location'],
+            'duration' => $validated['duration'],
+            'max_people' => $validated['max_people'],
+            'price' => $validated['price'],
+            'rating' => $validated['rating'],
+            'description' => $validated['description'],
+            'image_path' => $imagePath
         ]);
 
-        $tour->update($request->all());
-
-        return redirect()->route('tours.index')->with('success', 'Tour updated successfully.');
-    }
-
-    // Remove the specified tour from database
-    public function destroy(Tour $tour)
-    {
-        $tour->delete();
-
-        return redirect()->route('tours.index')->with('success', 'Tour deleted successfully.');
+        return redirect()->back()->with('success', 'Tour package created successfully!');
     }
 }
