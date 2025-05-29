@@ -3,76 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
-use App\Models\Tour;
+use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    // List all bookings
+    // Show the booking form
     public function index()
     {
-        // Eager load user and tour for performance
-        $bookings = Booking::with(['user', 'tour'])->get();
-        return view('bookings.index', compact('bookings'));
+        $packages = Package::all(); // Get all packages from the DB
+        return view('booking', compact('packages')); // Pass to the view
     }
 
-    // Show form to create a booking
     public function create()
     {
-        $tours = Tour::all();
-        return view('bookings.create', compact('tours'));
+        $packages = Package::all();
+        return view('booking', compact('packages'));
     }
 
-    // Store a new booking
+    // Handle booking form submission
     public function store(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'tour_id' => 'required|exists:tours,id',
-            'booking_date' => 'required|date',
-            'number_of_people' => 'required|integer|min:1',
-            'status' => 'nullable|string', // you can refine this later
+        $validated = $request->validate([
+            'package_id' => 'required|exists:packages,id',
+            'booking_date' => 'required|date|after_or_equal:today',
+            'notes' => 'nullable|string',
         ]);
 
-        Booking::create($request->all());
-
-        return redirect()->route('bookings.index')->with('success', 'Booking created successfully.');
-    }
-
-    // Show one booking
-    public function show(Booking $booking)
-    {
-        return view('bookings.show', compact('booking'));
-    }
-
-    // Show form to edit a booking
-    public function edit(Booking $booking)
-    {
-        $tours = Tour::all();
-        return view('bookings.edit', compact('booking', 'tours'));
-    }
-
-    // Update a booking
-    public function update(Request $request, Booking $booking)
-    {
-        $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'tour_id' => 'required|exists:tours,id',
-            'booking_date' => 'required|date',
-            'number_of_people' => 'required|integer|min:1',
-            'status' => 'nullable|string',
+        Booking::create([
+            'user_id' => Auth::id(),
+            'name' => Auth::user()->name, // use auth user data here
+            'email' => Auth::user()->email,
+            'package_id' => $validated['package_id'],
+            'booking_date' => $validated['booking_date'],
+            'notes' => $validated['notes'],
         ]);
 
-        $booking->update($request->all());
-
-        return redirect()->route('bookings.index')->with('success', 'Booking updated successfully.');
+        return back()->with('success', 'Booking created successfully!');
     }
 
-    // Delete a booking
-    public function destroy(Booking $booking)
+    // Delete booking (cancel)
+    public function destroy($id)
     {
+        $booking = Booking::findOrFail($id);
+
+        // Check ownership
+        if ($booking->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $booking->delete();
 
-        return redirect()->route('bookings.index')->with('success', 'Booking deleted successfully.');
+        return back()->with('success', 'Booking cancelled successfully!');
+    }
+
+    // Optional: View single booking details for modal or API
+    public function show($id)
+    {
+        $booking = Booking::with('package')->findOrFail($id);
+
+        // Check ownership
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        return response()->json($booking);
     }
 }

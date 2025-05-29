@@ -6,14 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// If you are NOT using Laravel Sanctum for API authentication, you should NOT have this line:
-// use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-    // If you removed HasApiTokens, ensure it's not here either:
-    // use HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -25,8 +21,8 @@ class User extends Authenticatable
         'email',
         'password',
         'phone',
-        'profile_picture', // Ensure this is in your fillable array if you're using it
-        'avatar_url',      // Ensure this is in your fillable array if you're using it
+        'profile_picture', // if used
+        'avatar_url',      // if used
     ];
 
     /**
@@ -51,21 +47,36 @@ class User extends Authenticatable
 
     /**
      * Get the bookings associated with the user.
-     * This defines a one-to-many relationship where a User has many Bookings.
-     * Ensure your 'Booking' model exists in App\Models\Booking.
      */
-    public function bookings()
-    {
-        return $this->hasMany(Booking::class);
-    }
+   // User.php
+
+public function testimonials()
+{
+    return $this->hasMany(Testimonial::class);
+}
+
+public function bookings()
+{
+    return $this->hasMany(Booking::class);
+}
 
     /**
-     * Get the testimonials associated with the user.
-     * This defines a one-to-many relationship where a User has many Testimonials.
-     * Ensure your 'Testimonial' model exists in App\Models\Testimonial.
+     * Get the packages booked by the user through bookings.
      */
-    public function testimonials()
+    public function bookedPackages()
     {
-        return $this->hasMany(Testimonial::class);
+        // hasManyThrough(target, through, firstKeyOnThrough, secondKeyOnTarget, localKey, secondLocalKey)
+        // In your case:
+        // - User hasMany Bookings (user_id on bookings)
+        // - Booking belongsTo Package (package_id on bookings)
+        // So get Packages through Bookings
+        return $this->hasManyThrough(
+            Package::class,    // final target model
+            Booking::class,    // intermediate model
+            'user_id',         // Foreign key on bookings table (relates to users.id)
+            'id',              // Foreign key on packages table (relates to bookings.package_id)
+            'id',              // Local key on users table
+            'package_id'       // Local key on bookings table
+        );
     }
 }

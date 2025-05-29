@@ -28,6 +28,6 @@
     @include('components.services')
 
     {{-- Testimonial Section --}}
-    @include('components.testimonial')
+    @include('components.testimonial', ['testimonials' => $testimonials])
 
 @endsection

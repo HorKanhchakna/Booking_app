@@ -11,8 +11,9 @@
             <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
                 <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
                 <h1 class="mb-4">Welcome to <span class="text-primary">Tourist</span></h1>
-                <p class="mb-4">Tempor erat elitr rebum at clita...</p>
-                <p class="mb-4">Tempor erat elitr rebum at clita...</p>
+                <p class="mb-4">Discover unforgettable travel experiences tailored just for you. Our dedicated team ensures every detail is perfect, making your journey seamless and enjoyable.</p>
+                <p class="mb-4">From breathtaking destinations to exclusive deals, we provide personalized services that cater to your unique preferences and travel style.</p>
+
                 <div class="row gy-2 gx-4 mb-4">
                     <div class="col-sm-6">
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>First Class Flights</p>
@@ -33,7 +34,7 @@
                         <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>24/7 Service</p>
                     </div>
                 </div>
-                <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a>
+                {{-- <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a> --}}
             </div>
         </div>
     </div>

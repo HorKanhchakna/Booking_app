@@ -2,76 +2,87 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Testimonial;
-use App\Models\Tour;
 use Illuminate\Http\Request;
+use App\Models\Testimonial;
+use Illuminate\Support\Facades\Auth;
 
 class TestimonialController extends Controller
 {
-    // List all testimonials
+    // Display all testimonials and optionally pass a testimonial for editing
     public function index()
     {
-        // You may want to eager load user and tour for efficiency
-        $testimonials = Testimonial::with(['user', 'tour'])->get();
-        return view('testimonials.index', compact('testimonials'));
+        $testimonials = Testimonial::all();
+        return view('testimonials', compact('testimonials'));
     }
 
-    // Show form to create a testimonial
-    public function create()
+    // Show testimonials on another page like services
+    public function services()
     {
-        // You may need list of tours to select from
-        $tours = Tour::all();
-        return view('testimonials.create', compact('tours'));
+        $testimonials = Testimonial::all();
+        return view('services', compact('testimonials'));
     }
 
     // Store a new testimonial
     public function store(Request $request)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',    // user must exist
-            'tour_id' => 'required|exists:tours,id',    // tour must exist
+            'package_id' => 'required|exists:packages,id',
             'rating' => 'required|integer|min:1|max:5',
-            'review' => 'nullable|string',
+            'review' => 'required|string|max:1000',
         ]);
 
-        Testimonial::create($request->all());
+        Testimonial::create([
+            'user_id' => Auth::id(),
+            'package_id' => $request->package_id,
+            'rating' => $request->rating,
+            'review' => $request->review,
+        ]);
 
-        return redirect()->route('testimonials.index')->with('success', 'Testimonial created successfully.');
+        return redirect()->route('testimonials.index')->with('success', 'Testimonial submitted successfully!');
     }
 
-    // Show one testimonial
-    public function show(Testimonial $testimonial)
+    // Show the same index view with a testimonial for editing
+    public function edit($id)
     {
-        return view('testimonials.show', compact('testimonial'));
+        $testimonials = Testimonial::all();
+        $testimonial = Testimonial::findOrFail($id);
+        return view('testimonials', compact('testimonials', 'testimonial'));
     }
 
-    // Show form to edit a testimonial
-    public function edit(Testimonial $testimonial)
-    {
-        $tours = Tour::all();
-        return view('testimonials.edit', compact('testimonial', 'tours'));
-    }
-
-    // Update a testimonial
-    public function update(Request $request, Testimonial $testimonial)
+    // Update an existing testimonial
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'tour_id' => 'required|exists:tours,id',
             'rating' => 'required|integer|min:1|max:5',
-            'review' => 'nullable|string',
+            'review' => 'required|string|max:1000',
         ]);
 
-        $testimonial->update($request->all());
+        $testimonial = Testimonial::findOrFail($id);
 
-        return redirect()->route('testimonials.index')->with('success', 'Testimonial updated successfully.');
+        // Optional: check if user owns this testimonial
+        if ($testimonial->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $testimonial->update([
+            'rating' => $request->rating,
+            'review' => $request->review,
+        ]);
+
+        return redirect()->route('testimonials.index')->with('success', 'Testimonial updated successfully!');
     }
 
     // Delete a testimonial
-    public function destroy(Testimonial $testimonial)
+    public function destroy($id)
     {
+        $testimonial = Testimonial::findOrFail($id);
+
+        if ($testimonial->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $testimonial->delete();
 
-        return redirect()->route('testimonials.index')->with('success', 'Testimonial deleted successfully.');
+        return redirect()->route('testimonials.index')->with('success', 'Testimonial deleted successfully!');
     }
 }

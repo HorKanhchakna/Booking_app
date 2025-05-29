@@ -22,8 +22,7 @@
             </div>
         </div>
     </div>
-
     {{-- Testimonial Section --}}
-    @include('components.testimonial')
+    @include('components.testimonial', ['testimonials' => $testimonials])
 
 @endsection

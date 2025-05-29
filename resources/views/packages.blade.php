@@ -25,6 +25,7 @@
 
 
     {{-- Packages Section --}}
-    @include('components.packages')
+   @include('components.packages', ['packages' => $packages])
+
 
 @endsection

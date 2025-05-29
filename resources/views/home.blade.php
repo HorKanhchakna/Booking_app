@@ -11,11 +11,12 @@
     @include('components.services')
 
     {{-- Destination Section --}}
-    @include('components.destination')
+    @include('components.destination', ['destinations' => $destinations])
 
     {{-- Packages Section --}}
-    @include('components.packages')
-
+   @if(isset($packages))
+    @include('components.packages', ['packages' => $packages])
+@endif
     {{-- Booking Section --}}
     @include('components.booking')
 
@@ -26,6 +27,7 @@
     @include('components.team')
 
     {{-- Testimonial Section --}}
-    @include('components.testimonial')
+    @include('components.testimonial', ['testimonials' => $testimonials])
+
 
 @endsection
