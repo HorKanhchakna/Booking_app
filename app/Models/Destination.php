@@ -11,4 +11,7 @@ class Destination extends Model
     {
         return $this->belongsToMany(Package::class);
     }
+    protected $fillable = [
+        "*",
+    ];
 }

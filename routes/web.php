@@ -8,6 +8,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DestinationController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\ContactMessageController;
+use App\Http\Controllers\AdminController;
 
 
 /*
@@ -30,6 +31,10 @@ Route::view('/contact', 'contact')->name('contact');
 Route::post('/contact', [ContactMessageController::class, 'store'])->name('contact.store');
 Route::view('/team', 'team')->name('team');
 
+// dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('auth');
+Route::post('/destinations', [DestinationController::class, 'store'])->name('destinations.store')->middleware('auth');
 // Guest-only Routes (login/register)
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -38,6 +43,18 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
     Route::post('/register', [AuthController::class, 'register'])->name('register.submit');
 });
+
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])->name('bookings.approve');
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::delete('/booking/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
+    Route::get('/booking/{id}', [BookingController::class, 'show'])->name('booking.show');
+});
+
+// Placeholder for destinations.store (since it's referenced in the Blade template)
+Route::post('/destinations', [DestinationController::class, 'store'])->name('destinations.store');
 
 // Authenticated User Routes
 Route::middleware(['auth'])->group(function () {
@@ -56,6 +73,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/booking', [BookingController::class, 'create'])->name('bookings.create');
     Route::post('/booking', [BookingController::class, 'store'])->name('bookings.store');
 
+    // Destination routes
+    Route::post('/destinations/store', [DestinationController::class, 'store'])->name('destinations.store');
+    // Package routes
+    Route::post('/packages/store', [PackageController::class, 'store'])->name('packages.store');
     // Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -67,6 +88,11 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/bookings/{booking}/edit', [BookingController::class, 'edit'])->name('bookings.edit');
     Route::put('/bookings/{booking}', [BookingController::class, 'update'])->name('bookings.update');
     Route::delete('/bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+    Route::post('/bookings/{id}/approve', [BookingController::class, 'approve'])
+        ->middleware(['web', 'auth'])
+        ->name('bookings.approve');
+
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard'); // Adjust as needed
 });
 
 Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
@@ -77,5 +103,3 @@ Route::post('/user/profile-picture/update', [ProfileController::class, 'updatePr
 
 Route::resource('testimonials', TestimonialController::class);
 Route::resource('testimonials', TestimonialController::class)->except(['edit', 'update', 'destroy']);
-
-

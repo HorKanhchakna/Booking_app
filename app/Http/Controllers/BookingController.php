@@ -9,11 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class BookingController extends Controller
 {
-    // Show the booking form
     public function index()
     {
-        $packages = Package::all(); // Get all packages from the DB
-        return view('booking', compact('packages')); // Pass to the view
+        $packages = Package::all();
+        return view('booking', compact('packages'));
     }
 
     public function create()
@@ -22,7 +21,6 @@ class BookingController extends Controller
         return view('booking', compact('packages'));
     }
 
-    // Handle booking form submission
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -33,7 +31,7 @@ class BookingController extends Controller
 
         Booking::create([
             'user_id' => Auth::id(),
-            'name' => Auth::user()->name, // use auth user data here
+            'name' => Auth::user()->name,
             'email' => Auth::user()->email,
             'package_id' => $validated['package_id'],
             'booking_date' => $validated['booking_date'],
@@ -43,31 +41,30 @@ class BookingController extends Controller
         return back()->with('success', 'Booking created successfully!');
     }
 
-    // Delete booking (cancel)
     public function destroy($id)
     {
         $booking = Booking::findOrFail($id);
-
-        // Check ownership
         if ($booking->user_id !== Auth::id()) {
             abort(403, 'Unauthorized action.');
         }
-
         $booking->delete();
-
         return back()->with('success', 'Booking cancelled successfully!');
     }
 
-    // Optional: View single booking details for modal or API
     public function show($id)
     {
         $booking = Booking::with('package')->findOrFail($id);
-
-        // Check ownership
         if ($booking->user_id !== Auth::id()) {
             abort(403);
         }
-
         return response()->json($booking);
+    }
+
+    public function approve($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->status = 'approved';
+        $booking->save();
+        return redirect()->route('admin.dashboard')->with('success', 'Booking approved successfully!');
     }
 }

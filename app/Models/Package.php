@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Package extends Model
 {
     protected $fillable = [
-        'image', 'location', 'duration', 'people', 'price', 'description'
+        'image',
+        'location',
+        'duration',
+        'people',
+        'price',
+        'description'
     ];
 
     public function bookings()
@@ -15,7 +20,7 @@ class Package extends Model
         return $this->hasMany(Booking::class);
     }
     public function testimonials()
-{
-    return $this->hasMany(Testimonial::class);
-}
+    {
+        return $this->hasMany(Testimonial::class);
+    }
 }

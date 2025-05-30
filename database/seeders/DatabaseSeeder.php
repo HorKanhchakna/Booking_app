@@ -9,18 +9,16 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
 
-public function run(): void
-{
-    if (!User::where('email', 'test@example.com')->exists()) {
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+    public function run(): void
+    {
+        if (!User::where('email', 'test@example.com')->exists()) {
+            User::factory()->create([
+                'name' => 'Test User',
+                'email' => 'test@example.com',
+            ]);
+        }
+
+        $this->call(DestinationSeeder::class);
+        $this->call(PackageSeeder::class);
     }
-
-    $this->call(DestinationSeeder::class);
-    $this->call(PackageSeeder::class);
-}
-
-
 }
