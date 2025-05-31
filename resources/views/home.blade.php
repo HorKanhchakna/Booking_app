@@ -14,9 +14,9 @@
     @include('components.destination', ['destinations' => $destinations])
 
     {{-- Packages Section --}}
-   @if(isset($packages))
-    @include('components.packages', ['packages' => $packages])
-@endif
+    @if (isset($packages))
+        @include('components.packages', ['packages' => $packages])
+    @endif
     {{-- Booking Section --}}
     @include('components.booking')
 
