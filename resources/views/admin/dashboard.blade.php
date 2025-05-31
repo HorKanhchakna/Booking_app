@@ -46,6 +46,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $destination->name }}</h5>
                             <p class="card-text">Discount: {{ $destination->discount }}%</p>
+                            <p class="card-text">{{ $destination->description }}</p>
                         </div>
                     </div>
                 </div>

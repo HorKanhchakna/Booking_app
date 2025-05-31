@@ -12,13 +12,15 @@ class BookingController extends Controller
     public function index()
     {
         $packages = Package::all();
+        
         return view('booking', compact('packages'));
     }
 
     public function create()
     {
         $packages = Package::all();
-        return view('booking', compact('packages'));
+        $bookings = Booking::paginate(10);
+        return view('booking', compact( 'packages','bookings'));
     }
 
     public function store(Request $request)
